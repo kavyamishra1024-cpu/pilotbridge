@@ -184,6 +184,15 @@ def create_challenge(payload: ChallengeCreate):
     return {"id": challenge_id, "risk_tier": risk_tier, "status": "open"}
 
 
+@app.delete("/challenges/{challenge_id}")
+def delete_challenge(challenge_id: int):
+    conn = get_db()
+    conn.execute("DELETE FROM challenges WHERE id = ?", (challenge_id,))
+    conn.commit()
+    conn.close()
+    return {"deleted": challenge_id}
+
+
 @app.get("/challenges")
 def list_challenges(status: Optional[str] = None):
     conn = get_db()
